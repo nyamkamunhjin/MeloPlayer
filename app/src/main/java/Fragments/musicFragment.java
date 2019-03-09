@@ -113,8 +113,10 @@ public class musicFragment extends Fragment implements View.OnClickListener, Ser
     @Override
     public void onResume() {
         super.onResume();
-        if(mBound)
+        if(mBound) {
+            musicService.setCallbacks(musicFragment.this);
             loadUI();
+        }
     }
 
     public void loadUI() {

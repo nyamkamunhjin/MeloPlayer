@@ -318,16 +318,22 @@ public class MusicService extends Service implements AudioManager.OnAudioFocusCh
     public void onAudioFocusChange(int focusChange) {
         if(focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
             // Pause
-            mediaPlayer.pause();
+            if(serviceCallbacks != null)
+                serviceCallbacks.pauseMusic();
+            else
+                pauseMusic();
         }
         else if(focusChange == AudioManager.AUDIOFOCUS_GAIN) {
             // Resume
 
         }
         else if(focusChange == AudioManager.AUDIOFOCUS_LOSS) {
-            // Stop
-            mediaPlayer.stop();
-            mediaPlayer.release();
+            // Pause or stop
+            if(serviceCallbacks != null)
+                serviceCallbacks.pauseMusic();
+            else
+                pauseMusic();
+
         }
     }
 
