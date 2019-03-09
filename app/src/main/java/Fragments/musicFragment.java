@@ -29,10 +29,13 @@ import com.munhj.meloplayer.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
+
+import ServiceCallbacks.ServiceCallbacks;
 
 import static com.munhj.meloplayer.MainActivity.item;
 
-public class musicFragment extends Fragment implements View.OnClickListener {
+public class musicFragment extends Fragment implements View.OnClickListener, ServiceCallbacks {
 
     private TextView songName, artist, leftTime, rightTime;
 
@@ -51,7 +54,9 @@ public class musicFragment extends Fragment implements View.OnClickListener {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)  {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState)  {
 
         musicView = inflater.inflate(R.layout.activity_music, container, false);
         setUpUI();
@@ -66,6 +71,7 @@ public class musicFragment extends Fragment implements View.OnClickListener {
             MusicService.LocalBinder binder = ((MusicService.LocalBinder) service);
             musicService = binder.getService();
             mBound = true;
+            musicService.setCallbacks(musicFragment.this);
             loadUI();
         }
 
@@ -87,6 +93,7 @@ public class musicFragment extends Fragment implements View.OnClickListener {
         prevButton = musicView.findViewById(R.id.prevButton);
         playButton = musicView.findViewById(R.id.playButton);
         nextButton = musicView.findViewById(R.id.nextButton);
+
         prevButton.setOnClickListener(this);
         playButton.setOnClickListener(this);
         nextButton.setOnClickListener(this);
@@ -96,11 +103,21 @@ public class musicFragment extends Fragment implements View.OnClickListener {
     private void initiateService() {
         if(isMusicChosen && item != null) {
             Intent serviceIntent = new Intent(musicView.getContext(), MusicService.class);
-            musicView.getContext().bindService(serviceIntent, connection, Context.BIND_AUTO_CREATE);
+            serviceIntent.putExtra("stop_service", false);
+            musicView.getContext().bindService(serviceIntent,
+                    connection,
+                    Context.BIND_AUTO_CREATE);
         }
     }
 
-    private void loadUI() {
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(mBound)
+            loadUI();
+    }
+
+    public void loadUI() {
 
         if(isMusicChosen && item != null) {
             songName.setText(item.getSongName());
@@ -112,8 +129,6 @@ public class musicFragment extends Fragment implements View.OnClickListener {
             } else {
                 loadPaused();
             }
-
-
         }
 
 
@@ -124,8 +139,10 @@ public class musicFragment extends Fragment implements View.OnClickListener {
                     musicService.seekTo(progress);
                     SimpleDateFormat dateFormat = new SimpleDateFormat("mm:ss");
 
-                    leftTime.setText(dateFormat.format(new Date(musicService.getCurrentPosition())));
-                    rightTime.setText(dateFormat.format(new Date(musicService.getDuration() - musicService.getCurrentPosition())));
+                    leftTime.setText(dateFormat
+                            .format(new Date(musicService.getCurrentPosition())));
+                    rightTime.setText(dateFormat
+                            .format(new Date(musicService.getDuration() - musicService.getCurrentPosition())));
 
             }
             @Override
@@ -139,7 +156,6 @@ public class musicFragment extends Fragment implements View.OnClickListener {
 
 
     }
-
 
     // prev, play, next buttons
     @Override
@@ -198,12 +214,21 @@ public class musicFragment extends Fragment implements View.OnClickListener {
         startMusic();
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(mBound) {
+            musicService.setCallbacks(null);
+        }
+    }
+
     private void loadPaused() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("mm:ss");
 
-        leftTime.setText(dateFormat.format(new Date(musicService.getCurrentPosition())));
-        rightTime.setText(dateFormat.format(
-                new Date(musicService.getDuration() - musicService.getCurrentPosition())));
+        leftTime.setText(dateFormat
+                .format(new Date(musicService.getCurrentPosition())));
+        rightTime.setText(dateFormat
+                .format(new Date(musicService.getDuration() - musicService.getCurrentPosition())));
 
         seekBar.setMax(musicService.getDuration());
         seekBar.setProgress(musicService.getCurrentPosition());
@@ -226,7 +251,7 @@ public class musicFragment extends Fragment implements View.OnClickListener {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if(musicService.isPlaying()) {
+                                if(!musicService.isNull() && musicService.isPlaying()) {
                                     int newPosition = musicService.getCurrentPosition();
                                     int newMax = musicService.getDuration();
                                     seekBar.setMax(newMax);
@@ -255,13 +280,10 @@ public class musicFragment extends Fragment implements View.OnClickListener {
         thread.start();
     }
 
-
-
-
-
     public void setBottomNavigationView(BottomNavigationView bottomNavigationView) {
         this.bottomNavigationView = bottomNavigationView;
     }
+
 
     @Override
     public void onDestroy() {
@@ -272,4 +294,5 @@ public class musicFragment extends Fragment implements View.OnClickListener {
         }
 
     }
+
 }

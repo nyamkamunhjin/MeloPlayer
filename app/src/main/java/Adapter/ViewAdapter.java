@@ -37,7 +37,9 @@ public class ViewAdapter extends RecyclerView.Adapter<ViewAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_row, viewGroup, false);
+        View view =
+                LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.list_row, viewGroup, false);
         return new ViewHolder(view);
 
     }
@@ -55,23 +57,13 @@ public class ViewAdapter extends RecyclerView.Adapter<ViewAdapter.ViewHolder> {
         return listItems.size();
     }
 
-    public void startMusicService() {
-        Intent serviceIntent = new Intent(context.getApplicationContext(), MusicService.class);
-        ContextCompat.startForegroundService(context.getApplicationContext(), serviceIntent);
-    }
-
-    public void stopMusicService() {
-        Intent serviceIntent = new Intent(context.getApplicationContext(), MusicService.class);
-        context.stopService(serviceIntent);
-    }
-
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView artist;
-        public TextView song_name;
-        public ImageView albumCover;
+        private TextView artist;
+        private TextView song_name;
+        private ImageView albumCover;
 
-        public ViewHolder(@NonNull View itemView) {
+        private ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             artist = itemView.findViewById(R.id.artist);
@@ -90,7 +82,9 @@ public class ViewAdapter extends RecyclerView.Adapter<ViewAdapter.ViewHolder> {
                 serviceIntent.putExtra("songName", item.getSongName());
                 serviceIntent.putExtra("artist", item.getArtist());
                 serviceIntent.putExtra("songPath", item.getSongPath());
+
                 ContextCompat.startForegroundService(v.getContext(), serviceIntent);
+
                 musicFragment.isMusicChosen = true;
                 MainActivity.item = item;
                 MainActivity.savedItem = item;

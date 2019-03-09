@@ -18,21 +18,27 @@ import Adapter.ViewAdapter;
 
 public class ListFragment extends Fragment {
 
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
     private BottomNavigationView bottomNavigationView;
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
 
-        View setView = inflater.inflate(R.layout.fragment_list, container, false);
+        View setView =
+                inflater.inflate(R.layout.fragment_list, container, false);
 
-        recyclerView = setView.findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = setView.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        adapter = new ViewAdapter(getActivity(), MainActivity.musicHandler.listItems, bottomNavigationView);
+        RecyclerView.Adapter adapter =
+                new ViewAdapter(
+                        getActivity(),
+                        MainActivity.musicHandler.listItems,
+                        bottomNavigationView);
+
         recyclerView.setAdapter(adapter);
 
 

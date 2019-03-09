@@ -32,7 +32,7 @@ public class MyMusicHandler  {
             else {
                 String name = file.getName();
 
-                if(name.endsWith("mp3") || name.endsWith("MP3") || name.endsWith("m4a") || name.endsWith("M4A")) {
+                if(name.endsWith("mp3") || name.endsWith("MP3")) {
                     Log.d("reading: ", name);
                     parser = new MediaMetadataRetriever();
                     parser.setDataSource(file.getPath());
