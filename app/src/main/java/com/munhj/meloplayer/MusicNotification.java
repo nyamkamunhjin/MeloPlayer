@@ -7,7 +7,7 @@ import android.os.Build;
 
 public class MusicNotification extends Application {
     public static final String CHANNEL_ID = "musicServiceChannel";
-    public static boolean isBackFromNotification = false;
+    private static boolean isBackFromNotification = false;
 
 
     @Override
@@ -28,5 +28,14 @@ public class MusicNotification extends Application {
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(serviceChannel);
         }
+    }
+
+
+    public static boolean isIsBackFromNotification() {
+        return isBackFromNotification;
+    }
+
+    public static void setIsBackFromNotification(boolean isBackFromNotification) {
+        MusicNotification.isBackFromNotification = isBackFromNotification;
     }
 }

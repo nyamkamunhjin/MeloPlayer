@@ -20,7 +20,6 @@ import Fragments.musicFragment;
 import Model.ListItem;
 import java.util.List;
 
-import static com.munhj.meloplayer.MainActivity.item;
 
 public class ViewAdapter extends RecyclerView.Adapter<ViewAdapter.ViewHolder> {
 

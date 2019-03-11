@@ -69,8 +69,7 @@ public class MusicService extends Service implements AudioManager.OnAudioFocusCh
                     if(serviceCallbacks != null) {
                         if(mediaPlayer.isPlaying()) serviceCallbacks.pauseMusic();
                         else serviceCallbacks.startMusic();
-                    }
-                    else {
+                    } else {
                         if(mediaPlayer.isPlaying()) pauseMusic();
                         else startMusic();
                     }
@@ -91,11 +90,9 @@ public class MusicService extends Service implements AudioManager.OnAudioFocusCh
                         prevMusic();
                         startMusic();
                     }
-
                     break;
             }
-        }
-        else {
+        } else {
             Intent notificationIntent = new Intent(this, MainActivity.class);
             pendingIntent = PendingIntent.getActivity(this,
                     0, notificationIntent, 0);
@@ -157,10 +154,10 @@ public class MusicService extends Service implements AudioManager.OnAudioFocusCh
                 (new Intent(this, NotificationReceiver.class)).setAction("next"),
                 PendingIntent.FLAG_CANCEL_CURRENT));
 
-
+        // build notification
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_music_note_black_24dp)
-                .setCustomContentView(collapsedView)
+                .setCustomBigContentView(collapsedView)
                 .setContentIntent(pendingIntent)
                 .build();
 
@@ -191,16 +188,13 @@ public class MusicService extends Service implements AudioManager.OnAudioFocusCh
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        if(MainActivity.item.getPos() != MainActivity.musicHandler.listItems.size() - 1) {
+        if(MainActivity.item.getPos() != MainActivity.getListItems().size() - 1) {
             MainActivity.item = MainActivity
-                    .musicHandler
-                    .listItems
+                    .getListItems()
                     .get(MainActivity.item.getPos() + 1);
         }
         else {
-            MainActivity.item = MainActivity
-                    .musicHandler
-                    .listItems.get(0);
+            MainActivity.item = MainActivity.getListItems().get(0);
         }
 
         loadUI();
@@ -249,15 +243,13 @@ public class MusicService extends Service implements AudioManager.OnAudioFocusCh
     public void prevMusic() {
         if(MainActivity.item.getPos() != 0) {
             MainActivity.item = MainActivity
-                    .musicHandler
-                    .listItems
+                    .getListItems()
                     .get(MainActivity.item.getPos() - 1);
         }
         else {
             MainActivity.item = MainActivity
-                    .musicHandler
-                    .listItems
-                    .get(MainActivity.musicHandler.listItems.size() - 1);
+                    .getListItems()
+                    .get(MainActivity.getListItems().size() - 1);
         }
 
         loadUI();
@@ -271,16 +263,13 @@ public class MusicService extends Service implements AudioManager.OnAudioFocusCh
         if(mediaPlayer != null && mediaPlayer.isPlaying())
             mediaPlayer.seekTo(mediaPlayer.getDuration() - 1);
 
-        if(MainActivity.item.getPos() != MainActivity.musicHandler.listItems.size() - 1) {
+        if(MainActivity.item.getPos() != MainActivity.getListItems().size() - 1) {
             MainActivity.item = MainActivity
-                    .musicHandler
-                    .listItems
+                    .getListItems()
                     .get(MainActivity.item.getPos() + 1);
         }
         else {
-            MainActivity.item = MainActivity
-                    .musicHandler
-                    .listItems.get(0);
+            MainActivity.item = MainActivity.getListItems().get(0);
         }
 
 
@@ -297,21 +286,20 @@ public class MusicService extends Service implements AudioManager.OnAudioFocusCh
     public boolean isPlaying() {
         return mediaPlayer.isPlaying();
     }
-
     public int getCurrentPosition() {
         return mediaPlayer.getCurrentPosition();
     }
-
     public int getDuration() {
         return mediaPlayer.getDuration();
     }
-
     public void seekTo(int progress) {
         mediaPlayer.seekTo(progress);
     }
-
     public boolean isPaused() {
         return isPaused;
+    }
+    public void setCallbacks(ServiceCallbacks callbacks) {
+        this.serviceCallbacks = callbacks;
     }
 
     @Override
@@ -335,10 +323,6 @@ public class MusicService extends Service implements AudioManager.OnAudioFocusCh
                 pauseMusic();
 
         }
-    }
-
-    public void setCallbacks(ServiceCallbacks callbacks) {
-        this.serviceCallbacks = callbacks;
     }
 
 

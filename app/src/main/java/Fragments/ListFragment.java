@@ -33,14 +33,12 @@ public class ListFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        RecyclerView.Adapter adapter =
-                new ViewAdapter(
+        RecyclerView.Adapter adapter = new ViewAdapter(
                         getActivity(),
-                        MainActivity.musicHandler.listItems,
+                        MainActivity.getListItems(),
                         bottomNavigationView);
 
         recyclerView.setAdapter(adapter);
-
 
         return setView;
     }

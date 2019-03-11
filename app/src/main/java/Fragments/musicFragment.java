@@ -68,6 +68,7 @@ public class musicFragment extends Fragment implements View.OnClickListener, Ser
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
+            // when the music service is successfully connected to fragment
             MusicService.LocalBinder binder = ((MusicService.LocalBinder) service);
             musicService = binder.getService();
             mBound = true;
@@ -224,6 +225,7 @@ public class musicFragment extends Fragment implements View.OnClickListener, Ser
         }
     }
 
+    // method to load fragment interface when music is paused and re-opened
     private void loadPaused() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("mm:ss");
 
