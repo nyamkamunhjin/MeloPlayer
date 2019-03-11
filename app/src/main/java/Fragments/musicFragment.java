@@ -140,7 +140,7 @@ public class musicFragment extends Fragment implements View.OnClickListener, Ser
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser)
                     musicService.seekTo(progress);
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("mm:ss");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("mm:ss", Locale.US);
 
                     leftTime.setText(dateFormat
                             .format(new Date(musicService.getCurrentPosition())));
@@ -227,7 +227,7 @@ public class musicFragment extends Fragment implements View.OnClickListener, Ser
 
     // method to load fragment interface when music is paused and re-opened
     private void loadPaused() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("mm:ss", Locale.US);
 
         leftTime.setText(dateFormat
                 .format(new Date(musicService.getCurrentPosition())));
@@ -262,9 +262,9 @@ public class musicFragment extends Fragment implements View.OnClickListener, Ser
                                     seekBar.setProgress(newPosition);
 
                                     // update the text
-                                    leftTime.setText(String.valueOf(new SimpleDateFormat("mm:ss")
+                                    leftTime.setText(String.valueOf(new SimpleDateFormat("mm:ss", Locale.US)
                                             .format(new Date(newPosition))));
-                                    rightTime.setText(String.valueOf(new SimpleDateFormat("mm:ss")
+                                    rightTime.setText(String.valueOf(new SimpleDateFormat("mm:ss", Locale.US)
                                             .format(new Date(newMax - newPosition))));
 
                                     if(musicService.getDuration() - musicService.getCurrentPosition() < 1000)
