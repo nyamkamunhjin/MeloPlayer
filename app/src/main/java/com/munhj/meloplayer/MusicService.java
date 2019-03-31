@@ -1,5 +1,4 @@
 package com.munhj.meloplayer;
-
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -10,6 +9,7 @@ import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 import java.io.IOException;
@@ -20,7 +20,7 @@ import ServiceCallbacks.ServiceCallbacks;
 import static com.munhj.meloplayer.MainActivity.item;
 import static com.munhj.meloplayer.MusicNotification.CHANNEL_ID;
 
-public class MusicService extends Service implements AudioManager.OnAudioFocusChangeListener, MediaPlayer.OnCompletionListener {
+public class MusicService extends Service implements AudioManager.OnAudioFocusChangeListener {
     private String songName;
     private String songPath;
     private String artist;
@@ -32,7 +32,6 @@ public class MusicService extends Service implements AudioManager.OnAudioFocusCh
 
     //Bound service
     private final IBinder binder = new LocalBinder();
-
 
 
     public class LocalBinder extends Binder {
@@ -53,7 +52,7 @@ public class MusicService extends Service implements AudioManager.OnAudioFocusCh
         if(mediaPlayer == null)
             mediaPlayer = new MediaPlayer();
 
-        mediaPlayer.setOnCompletionListener(this);
+        // earphone button listener
     }
 
     @Override
@@ -157,7 +156,7 @@ public class MusicService extends Service implements AudioManager.OnAudioFocusCh
         // build notification
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_music_note_black_24dp)
-                .setCustomBigContentView(collapsedView)
+                .setCustomContentView(collapsedView)
                 .setContentIntent(pendingIntent)
                 .build();
 
@@ -186,20 +185,6 @@ public class MusicService extends Service implements AudioManager.OnAudioFocusCh
         System.exit(0);
     }
 
-    @Override
-    public void onCompletion(MediaPlayer mp) {
-        if(MainActivity.item.getPos() != MainActivity.getListItems().size() - 1) {
-            MainActivity.item = MainActivity
-                    .getListItems()
-                    .get(MainActivity.item.getPos() + 1);
-        }
-        else {
-            MainActivity.item = MainActivity.getListItems().get(0);
-        }
-
-        loadUI();
-        startMediaPlayer();
-    }
 
 
     public void startMediaPlayer() {

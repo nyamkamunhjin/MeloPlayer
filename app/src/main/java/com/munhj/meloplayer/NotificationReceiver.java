@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationManagerCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 public class NotificationReceiver extends BroadcastReceiver {
@@ -12,6 +13,7 @@ public class NotificationReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 //        Toast.makeText(context, intent.getAction(), Toast.LENGTH_LONG).show();
             switch(intent.getAction()) {
+                // listening notification buttons
                 case "stop":
                     stopMusicService(context);
                     break;
@@ -24,6 +26,8 @@ public class NotificationReceiver extends BroadcastReceiver {
                 case "prev":
                     prevMusicService(context);
                     break;
+                // earphone button listnening
+
             }
 
         NotificationManagerCompat notificationManager =

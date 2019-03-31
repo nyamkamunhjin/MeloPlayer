@@ -52,8 +52,8 @@
 
                     <Button
                         android:id="@+id/prevButton_notification"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
                         android:layout_marginStart="4dp"
                         android:layout_marginLeft="4dp"
                         android:layout_marginTop="4dp"
@@ -64,8 +64,8 @@
 
                     <ImageView
                         android:id="@+id/playButton_notification"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
                         android:layout_marginStart="4dp"
                         android:layout_marginLeft="4dp"
                         android:layout_marginTop="4dp"
@@ -75,8 +75,8 @@
 
                     <Button
                         android:id="@+id/nextButton_notification"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
                         android:layout_marginStart="4dp"
                         android:layout_marginLeft="4dp"
                         android:layout_marginTop="4dp"
@@ -87,8 +87,8 @@
 
                     <Button
                         android:id="@+id/stopButton_notification"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
                         android:layout_marginStart="4dp"
                         android:layout_marginLeft="4dp"
                         android:layout_marginTop="4dp"

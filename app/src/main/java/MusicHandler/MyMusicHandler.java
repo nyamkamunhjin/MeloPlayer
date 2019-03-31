@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
 import com.munhj.meloplayer.R;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import Model.ListItem;
 
-public class MyMusicHandler  {
+public class MyMusicHandler extends AsyncTask {
     private List<ListItem> listItems;
     private MediaMetadataRetriever parser;
     private Context context;
@@ -21,10 +22,10 @@ public class MyMusicHandler  {
         this.context = context;
         listItems = new ArrayList<>();
         ScanDirForMusic(Environment.getExternalStorageDirectory(), listItems, 0);
-
+//        this.execute();
     }
 
-    private void ScanDirForMusic(File dir, List<ListItem> files, int count) {
+    public void ScanDirForMusic(File dir, List<ListItem> files, int count) {
 
         for(File file : dir.listFiles()) {
             if(file.isDirectory())
@@ -56,9 +57,14 @@ public class MyMusicHandler  {
 
         }
     }
-
     public List<ListItem> getListItems() {
         return listItems;
     }
 
+    @Override
+    protected Object doInBackground(Object[] objects) {
+        ScanDirForMusic(Environment.getExternalStorageDirectory(), listItems, 0);
+        return null;
+    }
 }
+
