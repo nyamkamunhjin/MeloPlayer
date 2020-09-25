@@ -75,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
                             .beginTransaction()
                             .replace(R.id.fragment_container, selectedFragment)
                             .commit();
-
                     return true;
                 }
             };

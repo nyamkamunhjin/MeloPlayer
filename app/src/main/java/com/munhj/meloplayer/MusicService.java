@@ -306,7 +306,6 @@ public class MusicService extends Service implements AudioManager.OnAudioFocusCh
                 serviceCallbacks.pauseMusic();
             else
                 pauseMusic();
-
         }
     }
 
