@@ -111,6 +111,7 @@ public class MyMusicHandler extends AsyncTask {
                             coverImage,
                             count
                     )
+
             );
             count++;
 //            System.out.println("name: " + name);
