@@ -1,14 +1,18 @@
 package com.munhj.meloplayer;
 
 import android.Manifest;
+import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+
 import java.util.List;
+
 import Fragments.ListFragment;
 import Fragments.musicFragment;
 import Model.ListItem;
@@ -16,7 +20,8 @@ import MusicHandler.MyMusicHandler;
 
 public class MainActivity extends AppCompatActivity {
     public static final int STORAGE_PERMISSION = 1;
-    private MyMusicHandler musicHandler;
+    String requiredPermission = Manifest.permission.READ_EXTERNAL_STORAGE;
+
     private static List<ListItem> listItems;
     public static ListItem item;
     public static ListItem savedItem;
@@ -35,22 +40,27 @@ public class MainActivity extends AppCompatActivity {
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
         try {
-            musicHandler = new MyMusicHandler(this);
-            listItems = musicHandler.getListItems();
-        } catch(NullPointerException e) {
+            int checkValue = this.checkCallingOrSelfPermission(requiredPermission);
+
+            if (checkValue == PackageManager.PERMISSION_GRANTED) {
+                Log.d("", "granted");
+                ;
+                listItems = new MyMusicHandler(this).scanWithMediaProvider(0);
+            }
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
 
 
-            if(!MusicNotification.isIsBackFromNotification()) {
-                bottomNav.setSelectedItemId(R.id.nav_music_list);
-                MusicNotification.setIsBackFromNotification(true);
-            }
-            else
-                bottomNav.setSelectedItemId(R.id.nav_music_player);
+        if (!MusicNotification.isIsBackFromNotification()) {
+            bottomNav.setSelectedItemId(R.id.nav_music_list);
+            MusicNotification.setIsBackFromNotification(true);
+        } else
+            bottomNav.setSelectedItemId(R.id.nav_music_player);
 
 
     }
+
     // bottom navigation listener
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -58,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                     Fragment selectedFragment = null;
 
-                    switch(menuItem.getItemId()) {
+                    switch (menuItem.getItemId()) {
                         case R.id.nav_music_list:
                             ListFragment listFragment = new ListFragment();
                             listFragment.setBottomNavigationView(bottomNav);
@@ -71,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
                             break;
                     }
 
+                    assert selectedFragment != null;
                     getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.fragment_container, selectedFragment)

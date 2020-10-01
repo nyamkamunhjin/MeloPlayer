@@ -20,16 +20,16 @@ import java.util.List;
 
 import Model.ListItem;
 
-public class MyMusicHandler extends AsyncTask {
-    private List<ListItem> listItems;
+public class MyMusicHandler {
+
     private MediaMetadataRetriever parser;
     private Context context;
 
     public MyMusicHandler(Context context) {
         this.context = context;
-        listItems = new ArrayList<>();
+
 //        ScanDirForMusic(Environment.getExternalStorageDirectory(), listItems, 0);
-        ScanWithMediaProvider(listItems, 0);
+//        ScanWithMediaProvider(0);
 //        this.execute();
     }
 
@@ -66,7 +66,8 @@ public class MyMusicHandler extends AsyncTask {
         }
     }
 
-    public void ScanWithMediaProvider(List<ListItem> listItems, int count) {
+    public List<ListItem> scanWithMediaProvider(int count) {
+        List<ListItem> listItems = new ArrayList<>();
 //        ArrayList audio = new ArrayList();
 
         String[] projection = new String[]{
@@ -84,6 +85,7 @@ public class MyMusicHandler extends AsyncTask {
                 null,
                 null);
 
+        assert cursor != null;
         while (cursor.moveToNext()) {
 //            String name = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME));
 //            String album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
@@ -120,16 +122,19 @@ public class MyMusicHandler extends AsyncTask {
 //            System.out.println("title: " + title);
 
         }
-    }
 
-    public List<ListItem> getListItems() {
+        cursor.close();
         return listItems;
     }
 
-    @Override
-    protected Object doInBackground(Object[] objects) {
-        ScanDirForMusic(Environment.getExternalStorageDirectory(), listItems, 0);
-        return null;
-    }
+//    public List<ListItem> getListItems() {
+//        return listItems;
+//    }
+
+//    @Override
+//    protected Object doInBackground(Object[] objects) {
+//        ScanDirForMusic(Environment.getExternalStorageDirectory(), listItems, 0);
+//        return null;
+//    }
 }
 

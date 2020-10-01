@@ -69,7 +69,7 @@ public class musicFragment extends Fragment implements View.OnClickListener, Ser
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             // when the music service is successfully connected to fragment
-            MusicService.LocalBinder binder = ((MusicService.LocalBinder) service);
+            MusicService.LocalBinder binder = (MusicService.LocalBinder) service;
             musicService = binder.getService();
             mBound = true;
             musicService.setCallbacks(musicFragment.this);
@@ -295,7 +295,7 @@ public class musicFragment extends Fragment implements View.OnClickListener, Ser
         if(MainActivity.item != null) {
             musicView.getContext().unbindService(connection);
             mBound = false;
-        }
+    }
 
     }
 
